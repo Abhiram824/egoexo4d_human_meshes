@@ -1,0 +1,81 @@
+<meta charset="utf-8">
+<title>Data Format — Ego-Exo4D-HM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Ego-Exo4D-HM</a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="data-format.html" class="active">Data Format</a></li>
+      <li><a href="rendering.html">Rendering</a></li>
+      <li><a href="https://github.com/Abhiram824/egoexo4d_human_meshes">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Data format</h1>
+  <p class="lead">
+    Each take in the
+    <a href="https://huggingface.co/datasets/Ego-Exo4D-HM/npz-datasets/tree/main">Hugging Face release</a>
+    ships one file: <code>points_triangulated_world_results_merged.npz</code>.
+    <code>T</code> denotes the take's frame count.
+  </p>
+</div>
+
+<main class="doc-page">
+
+<section>
+  <h2><code>points_triangulated_world_results_merged.npz</code></h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Key</th><th>Shape</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>trans</code></td><td>(1, T, 3)</td><td>Global translation</td></tr>
+        <tr><td><code>root_orient</code></td><td>(1, T, 3)</td><td>Root orientation (axis-angle)</td></tr>
+        <tr><td><code>pose_body</code></td><td>(1, T, 63)</td><td>SMPL body pose (21 joints &times; 3, decoded from <code>latent_pose</code>)</td></tr>
+        <tr><td><code>hand_pose</code></td><td>(1, T, 90)</td><td>MANO hand pose, both hands</td></tr>
+        <tr><td><code>latent_pose</code></td><td>(1, T, 32)</td><td>VPoser latent body pose</td></tr>
+        <tr><td><code>betas_per_frame</code></td><td>(1, T, 16)</td><td>SMPL shape parameters (constant within each optimization chunk, broadcast per frame)</td></tr>
+        <tr><td><code>cam_R</code>, <code>cam_t</code></td><td>(5, T, 3, 3) / (5, T, 3)</td><td>Camera rotation/translation (fixed Ego-Exo4D calibration; cameras are not optimized)</td></tr>
+        <tr><td><code>intrins</code>, <code>cam_dist</code></td><td>(5, T, 3, 3) / (5, T, 5)</td><td>Camera intrinsics/distortion</td></tr>
+        <tr><td><code>joints3d</code></td><td>(1, T, 67, 3)</td><td>3D joint positions (world frame)</td></tr>
+        <tr><td><code>joints2d</code></td><td>(4, T, 67, 2)</td><td>Reprojected 2D joints, exo views only</td></tr>
+        <tr><td><code>valid</code></td><td>(1, T), int8</td><td>0 for frames whose optimization chunk logged a NaN/Inf loss term, 1 otherwise</td></tr>
+        <tr><td><code>chunk_ranges</code></td><td>(n_chunks, 2)</td><td>(start, end) frame index of each optimization chunk</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Quick load example:</p>
+  <pre><code>import numpy as np
+d = np.load("&lt;take&gt;/points_triangulated_world_results_merged.npz")
+print(d["trans"].shape)   # (1, T, 3)
+print(d["valid"].mean())  # fraction of frames NOT from a NaN-loss chunk</code></pre>
+</section>
+
+<section>
+  <h2>67-keypoint layout</h2>
+  <p>For <code>joints3d</code>/<code>joints2d</code>:</p>
+  <ul class="tight">
+    <li><strong>0&ndash;24</strong>: OpenPose body keypoints (19&ndash;24 are face/neck from ViTPose wholebody)</li>
+    <li><strong>25&ndash;45</strong>: left hand (21 keypoints)</li>
+    <li><strong>46&ndash;66</strong>: right hand (21 keypoints)</li>
+  </ul>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>See <a href="index.html">Overview</a> for citation.</p>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>

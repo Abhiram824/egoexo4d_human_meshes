@@ -1,0 +1,112 @@
+<meta charset="utf-8">
+<title>Running the Pipeline — Ego-Exo4D-HM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Ego-Exo4D-HM</a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="pipeline.html" class="active">Pipeline</a></li>
+      <li><a href="data-format.html">Data Format</a></li>
+      <li><a href="rendering.html">Rendering</a></li>
+      <li><a href="https://github.com/Abhiram824/egoexo4d_human_meshes">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Running the pipeline</h1>
+  <p class="lead">
+    <code>scripts/run_pipeline.py</code> is the current production entrypoint. It
+    processes an Ego-Exo4D take through 5 stages, auto-detecting Aria usage and
+    optimizer chunk size from the take name.
+  </p>
+</div>
+
+<main class="doc-page">
+
+<section>
+  <h2>Stages</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Stage</th><th>Script</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td><code>scripts/undistort_egoexo.py</code> / <code>undistort_egocam.py</code></td><td>Undistort &amp; extract frames</td></tr>
+        <tr><td>1</td><td><code>scripts/read_cameras.py</code></td><td>Compute camera matrices</td></tr>
+        <tr><td>2</td><td><code>scripts/run_bbox_selection.py</code> &rarr; ViTPose &rarr; <code>scripts/run_batched_hamer.py</code></td><td>Detection + pose + hand mesh</td></tr>
+        <tr><td>3</td><td><code>scripts/triangulate_points.py</code></td><td>Multi-view triangulation</td></tr>
+        <tr><td>4</td><td><code>slahmr/run_opt.py</code> (<code>smooth_fit</code>)</td><td>SLAHMR optimization, chunked</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--text-dim);">
+    Auto-detection: <code>use_aria</code> is <code>True</code> when the take name
+    contains <code>"cooking"</code> or <code>"bike"</code>, else <code>False</code>.
+    <code>chunk_size</code> is 100 frames for cooking takes, 2000 for everything
+    else (single chunk for anything shorter) — independent of <code>use_aria</code>,
+    so bike takes use Aria but still run in one chunk.
+  </p>
+</section>
+
+<section>
+  <h2>Single take (local)</h2>
+  <pre><code>cd /path/to/egoexo4d_human_meshes
+CUDA_VISIBLE_DEVICES=0 EGL_DEVICE_ID=0 PYOPENGL_PLATFORM=egl \
+  python scripts/run_pipeline.py --video &lt;take_name&gt; --device_num 0 --log-time
+
+# Examples:
+python scripts/run_pipeline.py --video cmu_bike02_4 --device_num 0 --log-time
+python scripts/run_pipeline.py --video iiith_cooking_109_4 --device_num 1 --log-time</code></pre>
+</section>
+
+<section>
+  <h2>Batch via jobs file</h2>
+  <p>
+    One JSON object per line: <code>{"take": "cmu_bike01_2", "status": "not_done"}</code>.
+    File-locking (<code>filelock</code>) lets multiple GPU processes pull from the
+    same jobs file concurrently.
+  </p>
+  <pre><code>python scripts/run_pipeline.py --jobs_file /path/to/jobs.jsonl --device_num 0 --log-time</code></pre>
+</section>
+
+<section>
+  <h2>Resuming from a stage</h2>
+  <p><code>--resume_stage N</code> skips stages 0..N-1:</p>
+  <pre><code>python scripts/run_pipeline.py --video &lt;take&gt; --resume_stage 3 --device_num 0</code></pre>
+  <p style="color:var(--text-dim);">
+    When resuming without an explicit stage, the pipeline checks sentinel files
+    to auto-detect the highest completed stage and resumes one stage before that
+    (redoing the last stage for robustness):
+  </p>
+  <ul class="tight">
+    <li>Stage 3 done &rarr; resume at 3: <code>slahmr/shot_idcs/points_triangulated.json</code></li>
+    <li>Stage 2 done &rarr; resume at 2: <code>slahmr/track_preds/points_triangulated/002/vitpose_out.json</code></li>
+    <li>Stage 1 done &rarr; resume at 1: <code>slahmr/cameras/points_triangulated/shot-0/cameras.npz</code></li>
+  </ul>
+</section>
+
+<section>
+  <h2>GPU environment</h2>
+  <p>Always set before running (the pipeline does this automatically when <code>--device_num N</code> is passed):</p>
+  <pre><code>export CUDA_VISIBLE_DEVICES=&lt;N&gt;
+export EGL_DEVICE_ID=&lt;N&gt;
+export PYOPENGL_PLATFORM=egl
+unset DISPLAY
+unset WAYLAND_DISPLAY</code></pre>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>See <a href="index.html">Overview</a> for citation.</p>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>

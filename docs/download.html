@@ -1,0 +1,120 @@
+<meta charset="utf-8">
+<title>Download — Ego-Exo4D-HM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Ego-Exo4D-HM</a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="download.html" class="active">Download</a></li>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="data-format.html">Data Format</a></li>
+      <li><a href="rendering.html">Rendering</a></li>
+      <li><a href="https://github.com/Abhiram824/egoexo4d_human_meshes">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Downloading the data</h1>
+  <p class="lead">
+    The raw Ego-Exo4D dataset is always required — rendering re-extracts each
+    take's video frames from it. Our pre-computed SLAHMR-optimized results let
+    you skip running the pipeline itself.
+  </p>
+</div>
+
+<main class="doc-page">
+
+<section>
+  <h2>Raw Ego-Exo4D dataset</h2>
+  <p>
+    Download the <a href="https://ego-exo4d-data.org/">Ego-Exo4D dataset</a> — see
+    their <a href="https://docs.ego-exo4d-data.org/">downloader docs</a> for the
+    official CLI. You'll need:
+  </p>
+  <ul class="tight">
+    <li><code>takes.json</code> and <code>captures.json</code> (per-take / per-capture metadata)</li>
+    <li>the <code>takes/</code> directory, including <code>trajectory/gopro_calibs.csv</code> per take (GoPro fisheye calibration + extrinsics)</li>
+    <li><code>annotations/ego_pose/</code>, only if you want to run keypoint evaluation against ground truth</li>
+  </ul>
+  <p>Then point the codebase at wherever you downloaded it:</p>
+  <pre><code>export EGOEXO4D_DATASET=/path/to/EgoExo4d_dataset</code></pre>
+  <p>
+    <code>slahmr/macros.py</code> reads this environment variable at import time,
+    so it must be exported in every shell you run pipeline scripts from — see
+    <a href="installation.html">Installation</a>.
+  </p>
+</section>
+
+<section>
+  <h2>Pre-computed results (Hugging Face)</h2>
+  <p>
+    Pre-computed SLAHMR optimization results for the full Ego-Exo4D take set are
+    published at
+    <a href="https://huggingface.co/datasets/Ego-Exo4D-HM/npz-datasets/tree/main">Ego-Exo4D-HM/npz-datasets</a>
+    — one merged <code>.npz</code> per take
+    (<code>&lt;take_name&gt;/points_triangulated_world_results_merged.npz</code>),
+    2649 takes, ~48GB total. This lets you render or evaluate results without
+    running the pipeline yourself — you still need <code>EGOEXO4D_DATASET</code>
+    set (see above), since rendering re-extracts the raw take's video frames.
+  </p>
+  <p>Install the <code>huggingface_hub</code> CLI if you don't already have it:</p>
+  <pre><code>pip install -U "huggingface_hub[cli]"</code></pre>
+
+  <h3>Download one take and render it</h3>
+  <pre><code>hf download Ego-Exo4D-HM/npz-datasets --repo-type dataset \
+    --include "cmu_bike02_4/*" --local-dir data_filtered
+
+python scripts/run_mesh_vis_hands_egoexo.py \
+    --npz_path data_filtered/cmu_bike02_4/points_triangulated_world_results_merged.npz</code></pre>
+  <p>
+    This writes one rendered video per exo camera
+    (<code>view_1.mp4</code>&ndash;<code>view_4.mp4</code>) next to the npz — see
+    <a href="rendering.html">Rendering</a> for details.
+  </p>
+  <p>
+    <strong>Pick a short take for a first try</strong> — take length varies a
+    lot. <code>cmu_bike02_4</code> (110 frames, ~2.5 minutes to render all 4
+    views) is a good default; to check a different take's length first:
+  </p>
+  <pre><code>python3 -c "
+import numpy as np
+d = np.load('data_filtered/&lt;take_name&gt;/points_triangulated_world_results_merged.npz')
+print(d['trans'].shape[1], 'frames')
+"</code></pre>
+
+  <h3>Download the entire dataset</h3>
+  <pre><code>hf download Ego-Exo4D-HM/npz-datasets --repo-type dataset --local-dir data_filtered</code></pre>
+  <p>This pulls all 2649 takes (~48GB). If it stalls partway with no visible progress (check with <code>du -sh data_filtered</code>):</p>
+  <ul class="tight">
+    <li><code>hf download</code> (default <code>--max-workers 8</code>) can wedge with all its HTTP connections stuck in <code>CLOSE-WAIT</code> — retry with <code>--max-workers 4</code> or lower.</li>
+    <li>Repeated retries in a tight loop can trip Hugging Face's API rate limit (1000 requests/5min — <code>429 Too Many Requests</code>), since every invocation re-lists all 2649 files' metadata even just to resume. Wait ~5 minutes before retrying rather than looping immediately.</li>
+    <li>The command is safe to just re-run — already-downloaded files are skipped, so an interrupted or stalled download picks up where it left off.</li>
+  </ul>
+  <p>Verify a complete download by comparing file counts:</p>
+  <pre><code>python3 -c "
+from huggingface_hub import HfApi
+import os
+remote = {f for f in HfApi().list_repo_files('Ego-Exo4D-HM/npz-datasets', repo_type='dataset') if f.endswith('.npz')}
+local = {os.path.relpath(os.path.join(r, f), 'data_filtered')
+         for r, _, fs in os.walk('data_filtered') for f in fs
+         if f.endswith('.npz') and '.cache' not in r}
+print(f'{len(local)}/{len(remote)} present, {len(remote - local)} missing')
+"</code></pre>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>See <a href="index.html">Overview</a> for citation.</p>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>

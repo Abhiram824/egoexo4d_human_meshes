@@ -1,0 +1,117 @@
+<meta charset="utf-8">
+<title>Ego-Exo4D-HM — 4D Human Motion Reconstruction for Ego-Exo Captures</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Ego-Exo4D Human Meshes (Ego-Exo4D-HM) dataset: 4D human motion reconstruction for ego-exo captures, recovering 3D body and hand pose from synchronized multi-camera Ego-Exo4D takes, released as pre-computed results.">
+<meta property="og:title" content="Ego-Exo4D-HM">
+<meta property="og:description" content="4D human motion reconstruction for ego-exo captures: 3D body + hand pose on Ego-Exo4D.">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- TODO: authors/affiliations block — add names + institution links here once finalized -->
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Ego-Exo4D-HM</a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Overview</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="data-format.html">Data Format</a></li>
+      <li><a href="rendering.html">Rendering</a></li>
+      <li><a href="https://github.com/Abhiram824/egoexo4d_human_meshes">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="collage-grid" aria-hidden="true"></div>
+  <div class="hero-overlay">
+    <h1>Ego-Exo4D Human Meshes Dataset</h1>
+    <p>
+      Multi-view reconstruction of 3D human body and hand pose on Ego-Exo4D.<br>
+      <span data-stat="total-hours-num">523</span> hours of video across
+      <span data-stat="activities-num">8</span> activities.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://arxiv.org/abs/2609.30187">Paper</a>
+      <a class="btn btn-secondary" href="#viewer">Browse the data</a>
+      <a class="btn btn-secondary" href="download.html">Get the dataset</a>
+      <a class="btn btn-secondary" href="installation.html">Install &amp; run</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="overview" data-stats-root>
+    <h2>Dataset overview</h2>
+    <div class="card-grid" style="margin-top:1.2rem;">
+      <div class="stat-card"><span class="num" data-stat="total-takes">—</span><span class="label">Takes processed</span></div>
+      <div class="stat-card"><span class="num" data-stat="total-hours">—</span><span class="label">Total video hours (5 cams)</span></div>
+      <div class="stat-card"><span class="num" data-stat="per-cam-hours">—</span><span class="label">Per-camera hours</span></div>
+      <div class="stat-card"><span class="num" data-stat="activities">—</span><span class="label">Activity types</span></div>
+    </div>
+  </section>
+
+  <section id="viewer">
+    <h2>Interactive viewer</h2>
+    <div class="viewer-layout">
+      <nav class="activity-tree" aria-label="Activity and place selector"></nav>
+      <div>
+        <div class="viewer-stage">
+          <video controls autoplay muted loop playsinline></video>
+        </div>
+        <p class="viewer-caption"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs">
+    <h2>Documentation</h2>
+    <div class="card-grid">
+      <a class="card" href="installation.html">
+        <h3>Installation</h3>
+        <p style="color:var(--text-dim); margin-bottom:0;">Environment setup, model checkpoints, and a verified test run.</p>
+      </a>
+      <a class="card" href="download.html">
+        <h3>Downloading the data</h3>
+        <p style="color:var(--text-dim); margin-bottom:0;">Raw Ego-Exo4D dataset, plus the pre-computed release on Hugging Face.</p>
+      </a>
+      <a class="card" href="pipeline.html">
+        <h3>Running the pipeline</h3>
+        <p style="color:var(--text-dim); margin-bottom:0;">Single takes, batch jobs, resuming, and the low-level optimizer.</p>
+      </a>
+      <a class="card" href="data-format.html">
+        <h3>Data format</h3>
+        <p style="color:var(--text-dim); margin-bottom:0;">The released npz file structure.</p>
+      </a>
+      <a class="card" href="rendering.html">
+        <h3>Rendering meshes</h3>
+        <p style="color:var(--text-dim); margin-bottom:0;">Turn a results npz into rendered SMPL mesh videos.</p>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>If you use our code or dataset, please cite:</p>
+    <pre><code>@misc{maddukuri2026egoexo4dhumanmeshesdataset,
+      title={Ego-Exo4D Human Meshes Dataset: 4D Human Motion Reconstruction for Ego-Exo Captures},
+      author={Abhiram Maddukuri and Georgios Pavlakos},
+      year={2026},
+      eprint={2609.30187},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2609.30187},
+}</code></pre>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/collage.js"></script>
+<script src="assets/js/viewer.js"></script>
+<script src="assets/js/stats.js"></script>

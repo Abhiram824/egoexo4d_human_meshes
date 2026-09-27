@@ -1,0 +1,30 @@
+{
+  "total_takes": 2649,
+  "total_frames": 11295991,
+  "per_camera_hours": 104.6,
+  "total_video_hours": 523.0,
+  "institutions": {
+    "uniandes": 852,
+    "sfu": 387,
+    "unc": 371,
+    "upenn": 195,
+    "iiith": 194,
+    "minnesota": 161,
+    "georgiatech": 143,
+    "indiana": 120,
+    "cmu": 81,
+    "utokyo": 74,
+    "fair": 47,
+    "nus": 24
+  },
+  "activities": {
+    "basketball": 817,
+    "dance": 587,
+    "cooking": 360,
+    "climbing": 348,
+    "bike-repair": 254,
+    "health": 123,
+    "soccer": 92,
+    "music": 68
+  }
+}

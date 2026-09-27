@@ -1,0 +1,185 @@
+{
+  "activity_labels": {
+    "cooking": "Cooking",
+    "music": "Music",
+    "soccer": "Soccer",
+    "health": "Health",
+    "basketball": "Basketball",
+    "dance": "Dance",
+    "bike-repair": "Bike Repair",
+    "climbing": "Climbing"
+  },
+  "activities": {
+    "basketball": {
+      "sfu": {
+        "path": "assets/videos/viewer/basketball/sfu.mp4",
+        "take": "sfu_basketball_03_66",
+        "place_label": "Simon Fraser University"
+      },
+      "unc": {
+        "path": "assets/videos/viewer/basketball/unc.mp4",
+        "take": "unc_basketball_03-31-23_02_16",
+        "place_label": "University of North Carolina at Chapel Hill"
+      },
+      "uniandes": {
+        "path": "assets/videos/viewer/basketball/uniandes.mp4",
+        "take": "uniandes_basketball_005_16",
+        "place_label": "Universidad de los Andes"
+      }
+    },
+    "bike-repair": {
+      "cmu": {
+        "path": "assets/videos/viewer/bike-repair/cmu.mp4",
+        "take": "cmu_bike15_4",
+        "place_label": "Carnegie Mellon University"
+      },
+      "fair": {
+        "path": "assets/videos/viewer/bike-repair/fair.mp4",
+        "take": "fair_bike_02_4",
+        "place_label": "FAIR, Meta"
+      },
+      "georgiatech": {
+        "path": "assets/videos/viewer/bike-repair/georgiatech.mp4",
+        "take": "georgiatech_bike_14_6",
+        "place_label": "Georgia Institute of Technology"
+      },
+      "indiana": {
+        "path": "assets/videos/viewer/bike-repair/indiana.mp4",
+        "take": "indiana_bike_04_9",
+        "place_label": "Indiana University"
+      }
+    },
+    "climbing": {
+      "minnesota": {
+        "path": "assets/videos/viewer/climbing/minnesota.mp4",
+        "take": "minnesota_rockclimbing_042_30",
+        "place_label": "University of Minnesota"
+      },
+      "uniandes": {
+        "path": "assets/videos/viewer/climbing/uniandes.mp4",
+        "take": "uniandes_bouldering_019_12",
+        "place_label": "Universidad de los Andes"
+      }
+    },
+    "cooking": {
+      "fair": {
+        "path": "assets/videos/viewer/cooking/fair.mp4",
+        "take": "fair_cooking_08_4",
+        "place_label": "FAIR, Meta"
+      },
+      "georgiatech": {
+        "path": "assets/videos/viewer/cooking/georgiatech.mp4",
+        "take": "georgiatech_cooking_03_02_2",
+        "place_label": "Georgia Institute of Technology"
+      },
+      "iiith": {
+        "path": "assets/videos/viewer/cooking/iiith.mp4",
+        "take": "iiith_cooking_60_2",
+        "place_label": "IIIT Hyderabad"
+      },
+      "indiana": {
+        "path": "assets/videos/viewer/cooking/indiana.mp4",
+        "take": "indiana_cooking_06_2",
+        "place_label": "Indiana University"
+      },
+      "minnesota": {
+        "path": "assets/videos/viewer/cooking/minnesota.mp4",
+        "take": "minnesota_cooking_023_2",
+        "place_label": "University of Minnesota"
+      },
+      "sfu": {
+        "path": "assets/videos/viewer/cooking/sfu.mp4",
+        "take": "sfu_cooking028_8",
+        "place_label": "Simon Fraser University"
+      },
+      "uniandes": {
+        "path": "assets/videos/viewer/cooking/uniandes.mp4",
+        "take": "uniandes_cooking_001_3",
+        "place_label": "Universidad de los Andes"
+      },
+      "upenn": {
+        "path": "assets/videos/viewer/cooking/upenn.mp4",
+        "take": "upenn_0714_Cooking_6_2",
+        "place_label": "University of Pennsylvania"
+      },
+      "utokyo": {
+        "path": "assets/videos/viewer/cooking/utokyo.mp4",
+        "take": "utokyo_sushi_10_1008_2",
+        "place_label": "University of Tokyo"
+      }
+    },
+    "dance": {
+      "uniandes": {
+        "path": "assets/videos/viewer/dance/uniandes.mp4",
+        "take": "uniandes_dance_022_38",
+        "place_label": "Universidad de los Andes"
+      },
+      "upenn": {
+        "path": "assets/videos/viewer/dance/upenn.mp4",
+        "take": "upenn_0707_Dance_3_7",
+        "place_label": "University of Pennsylvania"
+      }
+    },
+    "health": {
+      "georgiatech": {
+        "path": "assets/videos/viewer/health/georgiatech.mp4",
+        "take": "georgiatech_covid_13_8",
+        "place_label": "Georgia Institute of Technology"
+      },
+      "nus": {
+        "path": "assets/videos/viewer/health/nus.mp4",
+        "take": "nus_cpr_11_1",
+        "place_label": "National University of Singapore"
+      },
+      "sfu": {
+        "path": "assets/videos/viewer/health/sfu.mp4",
+        "take": "sfu_covid_007_2",
+        "place_label": "Simon Fraser University"
+      },
+      "utokyo": {
+        "path": "assets/videos/viewer/health/utokyo.mp4",
+        "take": "utokyo_pcr_2001_36_2",
+        "place_label": "University of Tokyo"
+      }
+    },
+    "music": {
+      "iiith": {
+        "path": "assets/videos/viewer/music/iiith.mp4",
+        "take": "iiith_piano_003_2",
+        "place_label": "IIIT Hyderabad"
+      },
+      "indiana": {
+        "path": "assets/videos/viewer/music/indiana.mp4",
+        "take": "indiana_music_09_6",
+        "place_label": "Indiana University"
+      },
+      "unc": {
+        "path": "assets/videos/viewer/music/unc.mp4",
+        "take": "unc_music_04-26-23_02_12",
+        "place_label": "University of North Carolina at Chapel Hill"
+      },
+      "upenn": {
+        "path": "assets/videos/viewer/music/upenn.mp4",
+        "take": "upenn_0717_Piano_3_5",
+        "place_label": "University of Pennsylvania"
+      }
+    },
+    "soccer": {
+      "cmu": {
+        "path": "assets/videos/viewer/soccer/cmu.mp4",
+        "take": "cmu_soccer08_1",
+        "place_label": "Carnegie Mellon University"
+      },
+      "iiith": {
+        "path": "assets/videos/viewer/soccer/iiith.mp4",
+        "take": "iiith_soccer_028_6",
+        "place_label": "IIIT Hyderabad"
+      },
+      "utokyo": {
+        "path": "assets/videos/viewer/soccer/utokyo.mp4",
+        "take": "utokyo_soccer_8000_17_6",
+        "place_label": "University of Tokyo"
+      }
+    }
+  }
+}

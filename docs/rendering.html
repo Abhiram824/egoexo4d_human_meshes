@@ -1,0 +1,77 @@
+<meta charset="utf-8">
+<title>Rendering — Ego-Exo4D-HM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">Ego-Exo4D-HM</a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="installation.html">Installation</a></li>
+      <li><a href="download.html">Download</a></li>
+      <li><a href="pipeline.html">Pipeline</a></li>
+      <li><a href="data-format.html">Data Format</a></li>
+      <li><a href="rendering.html" class="active">Rendering</a></li>
+      <li><a href="https://github.com/Abhiram824/egoexo4d_human_meshes">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Rendering meshes</h1>
+  <p class="lead">
+    Render the reconstructed SMPL mesh over the original camera footage from a
+    downloaded results npz.
+  </p>
+</div>
+
+<main class="doc-page">
+
+<section>
+  <h2>Mesh visualization</h2>
+  <p>
+    <code>scripts/run_mesh_vis_hands_egoexo.py</code> renders the reconstructed
+    per-frame SMPL mesh into each exo camera's view, producing one output video
+    per camera.
+  </p>
+  <pre><code>python scripts/run_mesh_vis_hands_egoexo.py \
+    --npz_path &lt;path/to/world_results(.npz)|merged.npz&gt; \
+    [--output_dir &lt;dir&gt;] [--num_render N]</code></pre>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Flag</th><th>Default</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>--npz_path</code></td><td>required</td><td>The take's <code>points_triangulated_world_results_merged.npz</code> — see <a href="data-format.html">Data Format</a></td></tr>
+        <tr><td><code>--output_dir</code></td><td><code>npz_path.parent / "final_vis"</code></td><td></td></tr>
+        <tr><td><code>--num_render</code></td><td><code>-1</code> (all frames)</td><td>Cap the frame count for a quick smoke test on a long take</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="color:var(--text-dim);">
+    The npz is the only input needed: the script generates the SMPL meshes from
+    it directly and extracts/undistorts the take's raw frames itself — only
+    <code>EGOEXO4D_DATASET</code> needs to be set.
+  </p>
+  <p>
+    Output: <code>view_1.mp4</code>&ndash;<code>view_4.mp4</code> in
+    <code>--output_dir</code>, one per exo camera, with the rendered mesh
+    overlaid on the source footage. Frames with <code>valid == 0</code> are
+    written without an overlay.
+  </p>
+  <p>Needs a working headless EGL setup:</p>
+  <pre><code>export PYOPENGL_PLATFORM=egl
+export EGL_DEVICE_ID=&lt;N&gt;</code></pre>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>See <a href="index.html">Overview</a> for citation.</p>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
